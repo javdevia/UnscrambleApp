@@ -5,22 +5,54 @@ import androidx.lifecycle.ViewModel
 
 class GameViewModel : ViewModel() {
 
+
+    private var _count = 0
+    private lateinit var _currentScrambleWord: String
+    private var _score = 0
+
+    val count: Int get() = _count
+    val currentScrambleWord: String get() = _currentScrambleWord
+    val score: Int get() = _score
+
+    private var wordsList: MutableList<String> = mutableListOf()
+    private lateinit var currentWord: String
+
     init {
         Log.d("GameFragment", "GameViewModel created!")
+        getNextWord()
     }
-    private var _count = 0
-    public val count: Int get() = _count
 
-    private var _currentScrambleWord = "Test"
-    public val currentScrambleWord: String get() = _currentScrambleWord
-
-    private var _score = 0
-    public val score: Int get() = _score
-
-    override fun onCleared(){
+    override fun onCleared() {
         super.onCleared()
         Log.d("GameFragment", "GameViewModel destroyed!")
     }
 
-    
+    private fun getNextWord() {
+        currentWord = allWordsList.random()
+        Log.d("JavierDevia", "El grupo es $wordsList")
+        while (wordsList.contains(currentWord)) {
+            currentWord = allWordsList.random()
+        }
+        wordsList.add(currentWord)
+        val tempWord = currentWord.toCharArray()
+        tempWord.shuffle()
+
+        while (String(tempWord).equals(currentWord, false)) {
+            tempWord.shuffle()
+        }
+        _currentScrambleWord = String(tempWord)
+        ++_count
+    }
+
+    /*
+    * Returns true if the current word count is less than MAX_NO_OF_WORDS.
+    * Updates the next word.
+    */
+    fun nextWord(): Boolean {
+        return if (count < MAX_NO_OF_WORDS) {
+            getNextWord()
+            true
+        } else false
+
+    }
 }

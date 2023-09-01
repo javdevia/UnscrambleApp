@@ -62,6 +62,7 @@ class GameFragment : Fragment() {
         // Setup a click listener for the Submit and Skip buttons.
         //binding.submit.setOnClickListener { onSubmitWord() }
         //binding.skip.setOnClickListener { onSkipWord() }
+
         // Update the UI
         updateNextWordOnScreen()
         binding.score.text = getString(R.string.score, 0)
@@ -114,4 +115,6 @@ class GameFragment : Fragment() {
     private fun updateNextWordOnScreen() {
         binding.textViewUnscrambledWord.text = viewModel.currentScrambleWord
     }
+
+
 }

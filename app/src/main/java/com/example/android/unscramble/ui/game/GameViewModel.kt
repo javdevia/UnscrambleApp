@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 class GameViewModel : ViewModel() {
 
 
-    private var _count = 0
+    private var _currentWordCount = 0
     private lateinit var _currentScrambleWord: String
     private var _score = 0
 
-    val count: Int get() = _count
+    val currentWordCount: Int get() = _currentWordCount
     val currentScrambleWord: String get() = _currentScrambleWord
     val score: Int get() = _score
 
@@ -42,7 +42,7 @@ class GameViewModel : ViewModel() {
             tempWord.shuffle()
         }
         _currentScrambleWord = String(tempWord)
-        ++_count
+        ++_currentWordCount
     }
 
     /*
@@ -50,7 +50,7 @@ class GameViewModel : ViewModel() {
     * Updates the next word.
     */
     fun nextWord(): Boolean {
-        return if (count < MAX_NO_OF_WORDS) {
+        return if (currentWordCount < MAX_NO_OF_WORDS) {
             getNextWord()
             true
         } else false
@@ -66,5 +66,15 @@ class GameViewModel : ViewModel() {
             return true
         }
         return false
+    }
+
+    /*
+    * Re-initializes the game data to restart the game.
+    */
+    fun reinitializeData() {
+        _score = 0
+        _currentWordCount = 0
+        wordsList.clear()
+        getNextWord()
     }
 }

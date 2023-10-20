@@ -1,18 +1,25 @@
 package com.example.android.unscramble.ui.game
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class GameViewModel : ViewModel() {
 
 
-    private var _currentWordCount = 0
-    private lateinit var _currentScrambleWord: String
-    private var _score = 0
+    private val _currentWordCount = MutableLiveData(0)
+    val currentWordCount: LiveData<Int>
+        get() = _currentWordCount
 
-    val currentWordCount: Int get() = _currentWordCount
-    val currentScrambleWord: String get() = _currentScrambleWord
-    val score: Int get() = _score
+    private val _currentScrambleWord = MutableLiveData<String>()
+    val currentScrambleWord: LiveData<String>
+        get() = _currentScrambleWord
+
+
+    private val _score = MutableLiveData(0)
+    val score: LiveData<Int>
+        get() = _score
 
     private var wordsList: MutableList<String> = mutableListOf()
     private lateinit var currentWord: String
@@ -41,8 +48,8 @@ class GameViewModel : ViewModel() {
         while (String(tempWord).equals(currentWord, false)) {
             tempWord.shuffle()
         }
-        _currentScrambleWord = String(tempWord)
-        ++_currentWordCount
+        _currentScrambleWord.value = String(tempWord)
+        _currentWordCount.value = (_currentWordCount.value)?.inc()
     }
 
     /*
@@ -50,14 +57,14 @@ class GameViewModel : ViewModel() {
     * Updates the next word.
     */
     fun nextWord(): Boolean {
-        return if (currentWordCount < MAX_NO_OF_WORDS) {
+        return if (currentWordCount.value!! < MAX_NO_OF_WORDS) {
             getNextWord()
             true
         } else false
     }
 
     private fun increaseScore() {
-        _score += SCORE_INCREASE
+        _score.value = _score.value?.plus(SCORE_INCREASE)
     }
 
     fun isUserWordCorrect(playerWord: String): Boolean {
@@ -72,8 +79,8 @@ class GameViewModel : ViewModel() {
     * Re-initializes the game data to restart the game.
     */
     fun reinitializeData() {
-        _score = 0
-        _currentWordCount = 0
+        _score.value = 0
+        _currentWordCount.value = 0
         wordsList.clear()
         getNextWord()
     }

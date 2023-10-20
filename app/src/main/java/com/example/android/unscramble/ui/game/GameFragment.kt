@@ -35,7 +35,6 @@ class GameFragment : Fragment() {
 
     private val viewModel: GameViewModel by viewModels()
 
-
     // Binding object instance with access to the views in the game_fragment.xml layout
     private lateinit var binding: GameFragmentBinding
 
@@ -49,11 +48,6 @@ class GameFragment : Fragment() {
     ): View {
         // Inflate the layout XML file and return a binding object instance
         binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment, container, false)
-        Log.d("GameFragment", "Game Fragment created/re-created!")
-        Log.d(
-            "GameFragment", "Word: ${viewModel.currentScrambleWord} " +
-                    "Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}"
-        )
         return binding.root
     }
 
@@ -75,36 +69,8 @@ class GameFragment : Fragment() {
         // Setup a click listener for the Submit and Skip buttons.
         binding.submit.setOnClickListener { onSubmitWord() }
         binding.skip.setOnClickListener { onSkipWord() }
-
-        // Update the UI
-
-//        viewModel.currentScrambleWord.observe(
-//            viewLifecycleOwner
-//        ) { newWord ->
-//            binding.textViewUnscrambledWord.text = newWord
-//        }
-//
-//        viewModel.score.observe(
-//            viewLifecycleOwner,
-//        ) { newScore ->
-//            binding.score.text = getString(R.string.score, newScore)
-//        }
-//
-//        viewModel.currentWordCount.observe(
-//            viewLifecycleOwner,
-//        ) { newWordCount ->
-//            binding.wordCount.text = getString(R.string.word_count, newWordCount, MAX_NO_OF_WORDS)
-//        }
     }
 
-    /*
-     * Gets a random word for the list of words and shuffles the letters in it.
-     */
-    private fun getNextScrambledWord(): String {
-        val tempWord = allWordsList.random().toCharArray()
-        tempWord.shuffle()
-        return String(tempWord)
-    }
 
     /*
      * Re-initializes the data in the ViewModel and updates the views with the new data, to
